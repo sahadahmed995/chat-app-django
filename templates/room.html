@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+    <title>Document</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        h1 {
+            margin: 0 0 20px 0;
+            padding: 18px 25px;
+            background-color: #333;
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+        }
+        body{
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .container{
+            padding: 20px;
+        }
+        #display{
+            padding: 20px;
+            background-color: rgb(231, 231, 231);
+            border-radius: 10px;
+        }
+        .messbox{
+            padding: 20px;
+            margin: 20px;
+            background-color: rgb(188, 187, 187);
+            border-radius: 20px;
+        }
+        .messbox span{
+            color: gray;
+        }
+        .textbox{
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            padding:  0 20px;
+            width: 100%;
+        }
+
+        .text {
+            border-radius: 10px;
+            padding: 20px;
+            background-color: #e7e7e7;
+            border-top: 1px solid #ccc;
+        }
+
+/* Form */
+        .textbox form {
+            display: flex;
+            width: 100%;
+        }
+        #message {
+        flex: 1;
+        height: 45px;
+        padding: 0 15px;
+        border: 1px solid #ccc;
+        outline: none;
+        font-size: 16px;
+        background-color: white;
+        transition: 0.2s;
+    }
+
+    #message:focus {
+        border-color: #666;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+    }
+
+    .textbox input[type="submit"] {
+        height: 45px;
+        padding: 0 22px;
+        border: none;
+        background-color: #333;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .textbox input[type="submit"]:hover {
+        background-color: #555;
+    }
+
+    .textbox input[type="submit"]:active {
+        transform: scale(0.97);
+    }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Room name: {{roomname}}</h1>
+    <div id="display">
+    </div>
+
+<script>
+    $(document).ready(function(){
+        setInterval(function(){
+            $.ajax({
+                type: 'GET',
+                url: '/getMessages/{{roomname}}/',
+                success:function(response){
+                    $('#display').empty()
+                    for (var key in response.messages){
+                        console.log(response.messages[key].user)
+                        var temp = "<div class='messbox'><b>"+response.messages[key].user+"</b><p>"+response.messages[key].value+"</p><span>"+response.messages[key].date+"</span></div>";
+                        $('#display').append(temp)
+                    }
+                }
+            })
+        },1000)
+    })
+</script>
+
+
+
+
+   <div class="textbox">
+       <div class="text">
+         <form id="post-from">
+            {% csrf_token %}
+            <input type="hidden" name="username" id="username" value="{{ username }}">
+            <input type="hidden" name="room_id" id="room_id" value="{{ room_id }}">
+            <input type="text" name="message" id="message" placeholder="Enter you text here">
+            <input type="submit" value="send">
+        </form>
+       </div>
+   </div>
+</div>
+</body>
+<script>
+    $(document).on('submit', '#post-from',function(e){
+        e.preventDefault();
+
+        $.ajax({
+            type:'POST',
+            url:'/send',
+            data:{
+                username:$('#username').val(),
+                room_id:$('#room_id').val(),
+                message:$('#message').val(),
+                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+            },
+            success: function(data){
+                // alert(data)
+            }
+        });
+        document.getElementById('message').value = ''
+    });
+</script>
+</html>
