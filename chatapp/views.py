@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Room, Message
 from django.http import  HttpResponse, JsonResponse
+from django.contrib import messages
 
 # Create your views here.
 def index(request):
@@ -23,9 +24,8 @@ def checkdata(request):
     if Room.objects.filter(name=roomname).exists():
         return redirect('room/'+roomname+'/?username='+username)
     else:
-        new_room = Room.objects.create(name=roomname)
-        new_room.save()
-        return redirect('room/'+roomname+'/?username='+username)
+        messages.info(request, 'Invalid room name please click on create room to create one')
+        return redirect("/")
 
 def send(request):
     message = request.POST['message']
@@ -46,4 +46,12 @@ def getMessages(request, room):
     })
 
 def create_room(request):
-    pass
+    new_roomname = request.POST['newroomname']
+
+    if Room.objects.filter(name=new_roomname).exists():
+        return JsonResponse({'messages': 'This room name is already exists please try another one'})
+    else:
+        new_room = Room.objects.create(name=new_roomname)
+        new_room.save()
+        return JsonResponse({'messages': 'Room created successfully'})
+

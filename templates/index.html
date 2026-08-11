@@ -56,6 +56,11 @@ h1 {
     outline: none;
     font-size: 16px;
 }
+.alart {
+    font-size: 14px;
+    color: rgb(255, 117, 117);
+    margin: 0;
+} 
 
 .input-group input:focus {
     border-color: #333;
@@ -85,7 +90,7 @@ h1 {
     top: 50%;
     left: 50%;
     width: 400px;
-    height: 450px;
+    height: 500px;
     padding: 35px;
     background-color: rgb(255, 255, 255);
     border-radius: 15px;
@@ -105,7 +110,7 @@ h1 {
 #create_popup form input[type=text]{
     width: 100%;
     height: 45px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     padding: 0px 14px;
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -132,6 +137,7 @@ h1 {
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
+    margin-top: 10px;
 }
 #new_Room:focus {
     outline: 0;
@@ -144,7 +150,6 @@ h1 {
     <div class="chat-container">
 
         <h1>💬 Chat</h1>
-
         <form action="checkdata" method="POST">
             {% csrf_token %}
 
@@ -158,7 +163,9 @@ h1 {
                     required
                 >
             </div>
-
+            {% for message in messages %}
+            <h3 class="alart">{{message}}</h3>
+            {% endfor %}
             <div class="input-group">
                 <label for="username">Username</label>
                 <input
@@ -174,18 +181,49 @@ h1 {
             <input id="create_btn" class="submit-btn create" type="button" value="Create room">
         </form>
     </div>
-    <div class="inactive" id="create_popup">
+    <div class="" id="create_popup">
         <h1>💬 Chat</h1>
-        <form  action="" class="">
+        <form   id="create_room" method="POST" required>
+            {% csrf_token %}
             <label for="new_Room">New Room Name:</label>
-            <input type="text" id="new_Room" placeholder="Enter your Room name:"></br>
+            <input type="text" id="newroomname" name="newroomname" placeholder="Enter your Room name:"></br>
+            <div id="successmessage"></div>
             <input id="create_room_btn" type="submit" value="Create">
         </form>
     </div>
 </body>
 <script>
     $('#create_btn').click(function(){
-        $('#create_popup').toggleClass('active')
+        $('#create_popup').removeClass('inactive')
+        $('#create_popup').addClass('active')
+    })
+    $(document).on('submit', '#create_room', function(e){
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: '/create_room',
+            data: {
+                newroomname:$('#newroomname').val(),
+                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+            },
+            success:function(data){
+                if (data.messages == "Room created successfully"){
+                    alert(data.messages)
+                    window.location.href = '/'
+                }else{
+                    $('#successmessage').html(
+                        '<p class="alart">'+data.messages+'</p>' 
+                    );
+                };
+                 
+            }
+        })
+
+    })
+    $(document).ready(function(){
+        $('#create_popup').removeClass('active')
+        $('#create_popup').addClass('inactive')
+        console.log('done')
     })
 </script>
 </html>

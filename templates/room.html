@@ -10,7 +10,7 @@
             box-sizing: border-box;
         }
         h1 {
-            margin: 0 0 20px 0;
+            margin: 0;
             padding: 18px 25px;
             background-color: #333;
             color: white;
@@ -24,12 +24,21 @@
             font-family: Arial, Helvetica, sans-serif;
         }
         .container{
+            height: 100vh;
+            display: flex;
             padding: 20px;
+            flex-direction: column;
+            overflow: hidden;
+            gap:20px;
+            overflow: hidden;
         }
         #display{
+            flex: 1;
             padding: 20px;
             background-color: rgb(231, 231, 231);
             border-radius: 10px;
+            overflow-y:scroll;
+            min-height: 0;
         }
         .messbox{
             padding: 20px;
@@ -41,10 +50,7 @@
             color: gray;
         }
         .textbox{
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            padding:  0 20px;
+            position:static;
             width: 100%;
         }
 
@@ -59,6 +65,7 @@
         .textbox form {
             display: flex;
             width: 100%;
+            flex-shrink: 0;
         }
         #message {
         flex: 1;
@@ -108,20 +115,35 @@
             $.ajax({
                 type: 'GET',
                 url: '/getMessages/{{roomname}}/',
-                success:function(response){
-                    $('#display').empty()
-                    for (var key in response.messages){
-                        console.log(response.messages[key].user)
-                        var temp = "<div class='messbox'><b>"+response.messages[key].user+"</b><p>"+response.messages[key].value+"</p><span>"+response.messages[key].date+"</span></div>";
-                        $('#display').append(temp)
+                success: function(response) {
+                    var display = $('#display');
+
+                    var wasNearBottom =
+                        display.scrollTop() + display.innerHeight() >=
+                        display[0].scrollHeight - 20;
+
+                    display.empty();
+
+                    for (var key in response.messages) {
+                        var temp = "<div class='messbox'><b>" +
+                            response.messages[key].user +
+                            "</b><p>" +
+                            response.messages[key].value +
+                            "</p><span>" +
+                            response.messages[key].date +
+                            "</span></div>";
+
+                        display.append(temp);
+                    }
+
+                    if (wasNearBottom) {
+                        display.scrollTop(display[0].scrollHeight);
                     }
                 }
-            })
+            });     
         },1000)
     })
 </script>
-
-
 
 
    <div class="textbox">
