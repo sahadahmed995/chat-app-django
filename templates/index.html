@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
     <title>Document</title>
     <style>
         * {
@@ -72,9 +73,70 @@ h1 {
     font-weight: bold;
     cursor: pointer;
 }
+.submit-btn.create{
+    margin-top: 20px;
+}
 
 .submit-btn:hover {
     background-color: #555;
+}
+#create_popup{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 400px;
+    height: 450px;
+    padding: 35px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+    transition: 1s;
+    transform: scale(-1);
+}
+#create_popup h1{
+    margin: 50px 0;
+}
+#create_popup.inactive{
+    transform: translate(-50%, -50%) scale(0);
+}
+#create_popup.active{
+    transform: translate(-50%, -50%) scale(1);
+}
+#create_popup form input[type=text]{
+    width: 100%;
+    height: 45px;
+    margin-bottom: 20px;
+    padding: 0px 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+
+}
+#create_popup form input[type=text]:focus{
+    border-color: #333;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+}
+#create_popup label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #444;
+}
+#create_room_btn{
+    width: 100%;
+    height: 45px;
+    border: none;
+    border-radius: 8px;
+    background-color: #333;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+#new_Room:focus {
+    outline: 0;
+    border-color: #333;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
 }
     </style>
 </head>
@@ -109,8 +171,21 @@ h1 {
             </div>
 
             <input class="submit-btn" type="submit" value="Join Chat">
+            <input id="create_btn" class="submit-btn create" type="button" value="Create room">
         </form>
-
+    </div>
+    <div class="inactive" id="create_popup">
+        <h1>💬 Chat</h1>
+        <form  action="" class="">
+            <label for="new_Room">New Room Name:</label>
+            <input type="text" id="new_Room" placeholder="Enter your Room name:"></br>
+            <input id="create_room_btn" type="submit" value="Create">
+        </form>
     </div>
 </body>
+<script>
+    $('#create_btn').click(function(){
+        $('#create_popup').toggleClass('active')
+    })
+</script>
 </html>
