@@ -46,9 +46,11 @@ def getMessages(request, room):
     })
 
 def create_room(request):
-    new_roomname = request.POST['newroomname']
-
-    if Room.objects.filter(name=new_roomname).exists():
+    new_roomname = request.POST['newroomname'].strip()
+    
+    if not new_roomname:
+        return JsonResponse({'messages': 'Room name can not be empty'})
+    elif Room.objects.filter(name=new_roomname).exists():
         return JsonResponse({'messages': 'This room name is already exists please try another one'})
     else:
         new_room = Room.objects.create(name=new_roomname)

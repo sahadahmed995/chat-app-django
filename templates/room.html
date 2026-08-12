@@ -24,7 +24,7 @@
             font-family: Arial, Helvetica, sans-serif;
         }
         .container{
-            height: 100vh;
+            height: 100dvh;
             display: flex;
             padding: 20px;
             flex-direction: column;
@@ -46,8 +46,17 @@
             background-color: rgb(188, 187, 187);
             border-radius: 20px;
         }
+        .messbox p {
+            overflow-wrap: anywhere;
+            word-break: normal;
+            line-height: 22px;
+        }
+        .messbox b{
+            font-size: 18px;
+        }
         .messbox span{
             color: gray;
+            font-size: 14px;
         }
         .textbox{
             position:static;
@@ -100,6 +109,45 @@
 
     .textbox input[type="submit"]:active {
         transform: scale(0.97);
+    }
+    @media all and (min-width:320px) and (max-width:480px){
+        h1 {
+            padding: 15px 20px;
+            background-color: #333;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+        }
+        .text {
+            border-radius: 8px;
+            padding: 12px;
+            background-color: #e7e7e7;
+            border-top: 1px solid #ccc;
+        }
+        #message{
+            height: 35px;
+            font-size: 12px;
+        }
+        .messbox{
+            padding: 10px 15px;
+            border-radius: 10px;
+        }
+        .textbox input[type="submit"]{
+            height: 35px;
+            font-size: 12px;
+            padding: 0 15px;
+        }
+        .messbox b{
+          font-size: 14px;  
+        }
+        .messbox p{
+            font-size: 12px;
+        }
+        .messbox span{
+            font-size: 10px;
+        }
     }
     </style>
 </head>

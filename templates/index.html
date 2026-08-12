@@ -9,6 +9,9 @@
         * {
     box-sizing: border-box;
 }
+html{
+    scrollbar-width: none;
+}
 
 body {
     margin: 0;
@@ -95,14 +98,14 @@ h1 {
     background-color: rgb(255, 255, 255);
     border-radius: 15px;
     box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
-    transition: 1s;
+    transition: 0.5s;
     transform: scale(-1);
 }
 #create_popup h1{
     margin: 50px 0;
 }
 #create_popup.inactive{
-    transform: translate(-50%, -50%) scale(0);
+    transform: translate(-50%, 200%) scale(0);
 }
 #create_popup.active{
     transform: translate(-50%, -50%) scale(1);
@@ -119,6 +122,7 @@ h1 {
 #create_popup form input[type=text]:focus{
     border-color: #333;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+    outline: 0;
 }
 #create_popup label {
     display: block;
@@ -143,6 +147,88 @@ h1 {
     outline: 0;
     border-color: #333;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+}
+#close_btn{
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    background-color: transparent;
+    border: 0;
+    font-size: 25px;
+    color: rgb(117,117,117);
+    transition-duration: 0.3s;
+}
+#close_btn:hover{
+    cursor: pointer;
+    color: #333;
+}
+
+/* rerponsive  */
+@media all and (min-width:320px) and (max-width:480px){
+    .chat-container {
+        width: 300px;
+        padding: 25px;
+    }
+    h1{
+        font-size: 26px;
+    }
+    .input-group label{
+        font-size: 12px;
+    } 
+    .input-group input{
+        height: 30px;
+        border-radius: 5px;
+        font-size: 12px;
+    }
+    .input-group input::placeholder{
+        font-size: 12px;
+    } 
+  
+    .todisplayflex{
+        display: flex;
+        flex-direction: row;
+        gap:10px;
+    }
+    .submit-btn{
+        height: 30px;
+        font-size: 12px;
+        border-radius: 5px;
+    }
+    .submit-btn.create{
+        margin: 0;
+    }
+    #create_popup{
+        width: 300px;
+        padding: 25px;
+        height: 350px;
+    }
+    #create_popup form label{
+        font-size: 12px;
+    }
+    #create_popup form input[type=text]{
+        height: 30px;
+        border-radius: 5px;
+    }
+    #create_popup form input[type=text]::placeholder{
+        font-size: 12px;
+    }
+    #create_room_btn{
+        height: 30px;
+        font-size: 12px;
+        border-radius: 5px;
+    }
+    #close_btn{
+        font-size: 18px;
+    }
+    .alart {
+        font-size: 12px;
+        color: rgb(255, 117, 117);
+        margin: 0;
+    } 
+    .input-group input:focus {
+        border-color: #333;
+        font-size: 12px;
+    }
 }
     </style>
 </head>
@@ -177,22 +263,31 @@ h1 {
                 >
             </div>
 
-            <input class="submit-btn" type="submit" value="Join Chat">
-            <input id="create_btn" class="submit-btn create" type="button" value="Create room">
+            <div class="todisplayflex">
+                <input class="submit-btn" type="submit" value="Join Chat">
+                <input id="create_btn" class="submit-btn create" type="button" value="Create room">
+            </div>
         </form>
     </div>
-    <div class="" id="create_popup">
+    <div class="inactive" id="create_popup">
         <h1>💬 Chat</h1>
+        <a id="close_btn">
+            <i class="fa-solid fa-xmark"></i>
+        </a>
         <form   id="create_room" method="POST" required>
             {% csrf_token %}
             <label for="new_Room">New Room Name:</label>
-            <input type="text" id="newroomname" name="newroomname" placeholder="Enter your Room name:"></br>
+            <input type="text" id="newroomname" name="newroomname" placeholder="Enter your Room name:" required></br>
             <div id="successmessage"></div>
             <input id="create_room_btn" type="submit" value="Create">
         </form>
     </div>
 </body>
 <script>
+    $(document).ready(function(){
+        $('#create_popup').removeClass('active')
+        $('#create_popup').addClass('inactive')
+    })
     $('#create_btn').click(function(){
         $('#create_popup').removeClass('inactive')
         $('#create_popup').addClass('active')
@@ -220,10 +315,10 @@ h1 {
         })
 
     })
-    $(document).ready(function(){
+    $('#close_btn').click(function(){
         $('#create_popup').removeClass('active')
         $('#create_popup').addClass('inactive')
-        console.log('done')
     })
 </script>
+<script src="https://kit.fontawesome.com/6f3c57e22e.js" crossorigin="anonymous"></script>
 </html>
