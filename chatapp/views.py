@@ -38,37 +38,23 @@ def send(request):
     return HttpResponse('message send done')
 
 def getMessages(request, room):
-    try:
-        room_details = Room.objects.get(name=room)
+    room_details = Room.objects.get(name=room)
 
-        messages = Message.objects.filter(
-            room=room_details.id
-        ).order_by('date')
+    messages = Message.objects.filter(room=str(room_details.id))
 
-        mess = []
+    mess = []
 
-        for message in messages:
-            data = {
-                'user': message.user,
-                'value': message.value,
-                'date': message.date,
-                'image': message.image.url if message.image else "",
-            }
-            mess.append(data)
+    for message in messages:
+        data = {
+            'user': message.user,
+            'value': message.value,
+            'date': message.date,
+        }
+        mess.append(data)
 
-        return JsonResponse({
-            'messages': mess
-        })
-
-    except Room.DoesNotExist:
-        return JsonResponse({
-            'error': 'Room does not exist'
-        }, status=404)
-
-    except Exception as e:
-        return JsonResponse({
-            'error': str(e)
-        }, status=500)
+    return JsonResponse({
+        'messages': mess
+    })
 
 def create_room(request):
     new_roomname = request.POST['newroomname'].strip()
