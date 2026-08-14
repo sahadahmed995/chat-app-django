@@ -31,8 +31,9 @@ def send(request):
     message = request.POST['message']
     room_id = request.POST['room_id']
     username = request.POST['username']
+    image = request.FILES.get('image', '')
 
-    new_message = Message.objects.create(value=message, user= username, room=room_id)
+    new_message = Message.objects.create(value=message, user= username, room=room_id, image= image)
     new_message.save()
     return HttpResponse('message send done')
 
@@ -40,9 +41,18 @@ def getMessages(request, room):
     room_details = Room.objects.get(name=room)
 
     messages = Message.objects.filter(room=room_details.id)
+    mess = []
+    for message in messages:
+        data = {
+            'user': message.user,
+            'value': message.value,
+            'date': message.date,
+            'image': message.image.url if message.image else "",
+        }
+        mess.append(data)
 
     return JsonResponse({
-        'messages': list(messages.values())
+        'messages': mess
     })
 
 def create_room(request):

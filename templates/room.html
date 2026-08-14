@@ -106,9 +106,33 @@
     .textbox input[type="submit"]:hover {
         background-color: #555;
     }
+    .sendimage{
+        width: 200px;
+        display: block;
+        margin: 10px 0;
+        border-radius: 20px;
+        border: 2px #ccc solid;
+        box-shadow: #c8c8c8 5px 5px 5px;
+    }
 
     .textbox input[type="submit"]:active {
         transform: scale(0.97);
+    }
+    #image{
+       display: none;
+    }
+    .inputimg{
+        font-size: 25px;
+        margin: auto 20px;
+        transition: .2s;
+        color: #999;
+    }
+
+    .inputimg:hover{
+        transform: scale(1.2);
+        margin: auto 20px;
+        cursor: pointer;   
+        color: #555;
     }
     @media all and (min-width:320px) and (max-width:480px){
         h1 {
@@ -148,6 +172,14 @@
         .messbox span{
             font-size: 10px;
         }
+        .sendimage{
+            width: 120px;
+            border-radius: 10px;
+        }
+        .inputimg{
+            font-size: 20px;
+            margin: auto 10px;
+        }
     }
     </style>
 </head>
@@ -173,17 +205,23 @@
                     display.empty();
 
                     for (var key in response.messages) {
-                        var temp = "<div class='messbox'><b>" +
-                            response.messages[key].user +
-                            "</b><p>" +
-                            response.messages[key].value +
-                            "</p><span>" +
-                            response.messages[key].date +
-                            "</span></div>";
+                        var startdiv = "<div class='messbox'>"
+                        var enddiv = "</div>"
+                        var name = "<b>"+response.messages[key].user +"</b>"
+                        var mess = "<p>" +response.messages[key].value +"</p>"
+                        var date = "<span>"+response.messages[key].date +"</span>"
+                        var img =  "<img class ='sendimage' src='"+response.messages[key].image+"'>"
+                        if (response.messages[key].image){
+                            var temp = startdiv + name+ img + mess + date + enddiv
+                        }else{
+                            var temp = startdiv + name + mess + date + enddiv
+                        }
 
-                        display.append(temp);
+                        if (response.messages[key].value || response.messages[key].image){
+                            display.append(temp);
+                        }    
+                        
                     }
-
                     if (wasNearBottom) {
                         display.scrollTop(display[0].scrollHeight);
                     }
@@ -196,11 +234,15 @@
 
    <div class="textbox">
        <div class="text">
-         <form id="post-from">
+         <form id="post-from" enctype="multipart/form-data">
             {% csrf_token %}
             <input type="hidden" name="username" id="username" value="{{ username }}">
             <input type="hidden" name="room_id" id="room_id" value="{{ room_id }}">
             <input type="text" name="message" id="message" placeholder="Enter you text here">
+            <label for="image" class="inputimg">
+                <i class="fa-regular fa-images"></i>
+            </label>
+            <input type="file" id="image" name="image" accept="image/*">
             <input type="submit" value="send">
         </form>
        </div>
@@ -211,20 +253,19 @@
     $(document).on('submit', '#post-from',function(e){
         e.preventDefault();
 
+        var frmdata = new FormData(document.getElementById('post-from'))
         $.ajax({
             type:'POST',
             url:'/send',
-            data:{
-                username:$('#username').val(),
-                room_id:$('#room_id').val(),
-                message:$('#message').val(),
-                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
-            },
+            data: frmdata,
+            processData: false,
+            contentType: false,
             success: function(data){
-                // alert(data)
+                $('#image')[0].value = ''
             }
         });
         document.getElementById('message').value = ''
     });
 </script>
+<script src="https://kit.fontawesome.com/6f3c57e22e.js" crossorigin="anonymous"></script>
 </html>
