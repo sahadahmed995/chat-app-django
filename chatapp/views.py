@@ -49,6 +49,7 @@ def getMessages(request, room):
             'user': message.user,
             'value': message.value,
             'date': message.date,
+            'image': message.image.url if message.image else "",
         }
         mess.append(data)
 
