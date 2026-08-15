@@ -1,9 +1,17 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightbox3@1.1.0/dist/lightbox3.css">
+    <script type="module">
+    import { Lightbox } from 'https://cdn.jsdelivr.net/npm/lightbox3@1.1.0/dist/lightbox3.esm.js';
+    // Initialize after the module loads.
+    Lightbox.init();
+    </script>
     <title>Document</title>
     <style>
         * {
@@ -126,6 +134,7 @@
         margin: auto 20px;
         transition: .2s;
         color: #999;
+        position: relative;
     }
 
     .inputimg:hover{
@@ -133,6 +142,28 @@
         margin: auto 20px;
         cursor: pointer;   
         color: #555;
+    }
+    :root{
+        --lb-image-width:1000px;
+    }
+    .imagepreview.active{
+        display: block;
+        font-size: 14px;
+        position: absolute;
+        top: -7px;
+        right: -7px;
+        background-color: #333;
+        width: 20px;
+        height: 20px;
+        border-radius: 20px;
+    }
+    .imagepreview p{
+        transform: translate(-50%, -50%);
+        margin: 50% 0 0 50%;
+        color: white;
+    }
+    .imagepreview{
+        display: none;
     }
     @media all and (min-width:320px) and (max-width:480px){
         h1 {
@@ -180,7 +211,19 @@
             font-size: 20px;
             margin: auto 10px;
         }
-    }
+        .inputimg:hover{
+            transform: scale(1);
+            margin: auto 10px;
+            cursor: pointer;   
+            color: #555;
+        }
+        .imagepreview.active {
+            font-size: 10px;
+            width: 15px;
+            height: 15px;
+            border-radius: 15px;
+        }
+        }
     </style>
 </head>
 <body>
@@ -210,7 +253,7 @@
                         var name = "<b>"+response.messages[key].user +"</b>"
                         var mess = "<p>" +response.messages[key].value +"</p>"
                         var date = "<span>"+response.messages[key].date +"</span>"
-                        var img =  "<img class ='sendimage' src='"+response.messages[key].image+"'>"
+                        var img =  "<div><a class='demo' href='"+ response.messages[key].image +"' data-lightbox='example-1'><img class='example-image sendimage' src='"+ response.messages[key].image +"' alt='image-1'></a></div>"
                         if (response.messages[key].image){
                             var temp = startdiv + name+ img + mess + date + enddiv
                         }else{
@@ -241,6 +284,9 @@
             <input type="text" name="message" id="message" placeholder="Enter you text here">
             <label for="image" class="inputimg">
                 <i class="fa-regular fa-images"></i>
+                <div class="imagepreview" id="imagepreview">
+                    <p>1</p>
+                </div>
             </label>
             <input type="file" id="image" name="image" accept="image/*">
             <input type="submit" value="send">
@@ -266,6 +312,14 @@
         });
         document.getElementById('message').value = ''
     });
+    setInterval(function(){
+        let imagepreview = document.getElementById('image').value
+        if (imagepreview != '') {
+            $('#imagepreview').addClass('active')
+        }else{
+            $('#imagepreview').removeClass('active')
+        }
+    },500)
 </script>
 <script src="https://kit.fontawesome.com/6f3c57e22e.js" crossorigin="anonymous"></script>
 </html>
