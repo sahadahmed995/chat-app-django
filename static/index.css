@@ -1,0 +1,228 @@
+* {
+    box-sizing: border-box;
+}
+html{
+    scrollbar-width: none;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f2f2f2;
+}
+
+.chat-container {
+    width: 400px;
+    padding: 35px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+}
+
+h1 {
+    margin: 0 0 30px;
+    text-align: center;
+    font-size: 32px;
+    color: #333;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #444;
+}
+
+.input-group input {
+    width: 100%;
+    height: 45px;
+    padding: 0 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    font-size: 16px;
+}
+.alart {
+    font-size: 14px;
+    color: rgb(255, 117, 117);
+    margin: 0;
+} 
+
+.input-group input:focus {
+    border-color: #333;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+}
+
+.submit-btn {
+    width: 100%;
+    height: 45px;
+    border: none;
+    border-radius: 8px;
+    background-color: #333;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.submit-btn.create{
+    margin-top: 20px;
+}
+
+.submit-btn:hover {
+    background-color: #555;
+}
+#create_popup{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 400px;
+    height: 500px;
+    padding: 35px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+    transition: 0.5s;
+    transform: scale(-1);
+}
+#create_popup h1{
+    margin: 50px 0;
+}
+#create_popup.inactive{
+    transform: translate(-50%, 200%) scale(0);
+}
+#create_popup.active{
+    transform: translate(-50%, -50%) scale(1);
+}
+#create_popup form input[type=text]{
+    width: 100%;
+    height: 45px;
+    margin-bottom: 10px;
+    padding: 0px 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+
+}
+#create_popup form input[type=text]:focus{
+    border-color: #333;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+    outline: 0;
+}
+#create_popup label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #444;
+}
+#create_room_btn{
+    width: 100%;
+    height: 45px;
+    border: none;
+    border-radius: 8px;
+    background-color: #333;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+}
+#new_Room:focus {
+    outline: 0;
+    border-color: #333;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+}
+#close_btn{
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    background-color: transparent;
+    border: 0;
+    font-size: 25px;
+    color: rgb(117,117,117);
+    transition-duration: 0.3s;
+}
+#close_btn:hover{
+    cursor: pointer;
+    color: #333;
+}
+
+/* rerponsive  */
+@media all and (min-width:320px) and (max-width:480px){
+    .chat-container {
+        width: 300px;
+        padding: 25px;
+    }
+    h1{
+        font-size: 26px;
+    }
+    .input-group label{
+        font-size: 12px;
+    } 
+    .input-group input{
+        height: 30px;
+        border-radius: 5px;
+        font-size: 12px;
+        padding: 0 8px;
+    }
+    .input-group input::placeholder{
+        font-size: 12px;
+    } 
+  
+    .todisplayflex{
+        display: flex;
+        flex-direction: row;
+        gap:10px;
+    }
+    .submit-btn{
+        height: 30px;
+        font-size: 12px;
+        border-radius: 5px;
+    }
+    .submit-btn.create{
+        margin: 0;
+    }
+    #create_popup{
+        width: 300px;
+        padding: 25px;
+        height: 350px;
+    }
+    #create_popup form label{
+        font-size: 12px;
+    }
+    #create_popup form input[type=text]{
+        height: 30px;
+        border-radius: 5px;
+        padding: 0px 8px;
+    }
+    #create_popup form input[type=text]::placeholder{
+        font-size: 12px;
+    }
+    #create_room_btn{
+        height: 30px;
+        font-size: 12px;
+        border-radius: 5px;
+    }
+    #close_btn{
+        font-size: 18px;
+        top: 15px;
+        right: 15px;
+    }
+    .alart {
+        font-size: 12px;
+        color: rgb(255, 117, 117);
+        margin: 0;
+    } 
+    .input-group input:focus {
+        border-color: #333;
+        font-size: 12px;
+    }
+}
